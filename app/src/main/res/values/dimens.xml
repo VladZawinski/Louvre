@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<!--    This value prevents bottomNavigationItemText shrink when onClick-->
+    <dimen name="design_bottom_navigation_active_text_size"
+        tools:override="true">12sp</dimen>
+
+</resources>

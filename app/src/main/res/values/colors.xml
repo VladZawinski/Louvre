@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#272121</color>
+    <color name="colorAccent">#363333</color>
+    <color name="soft_white">#f6e9e9</color>
+
+<!--    moss palette-->
+    <color name="cyan">#00e0c7</color>
+    <color name="dark_cyan">#009394</color>
+    <color name="very_dark_cyan">#006270</color>
 </resources>

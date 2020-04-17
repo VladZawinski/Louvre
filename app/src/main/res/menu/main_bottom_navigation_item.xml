@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_home"
+        android:title="@string/home"
+        android:icon="@drawable/bottomnavigation_home_selector"/>
+
+    <item
+        android:id="@+id/action_explore"
+        android:title="@string/explore"
+        android:icon="@drawable/bottom_navigation_explore_selector"/>
+
+    <item
+        android:id="@+id/action_collections"
+        android:title="@string/collections"
+        android:icon="@drawable/bottomnavigation_collection_selector"/>
+
+    <item
+        android:id="@+id/action_favorite"
+        android:title="@string/favorite"
+        android:icon="@drawable/bottomnavigation_favorite_selector"/>
+</menu>
