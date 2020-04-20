@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import dagger.android.DaggerActivity
+import dagger.android.support.DaggerAppCompatActivity
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : DaggerAppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-    }
 
     fun wantToMakeStatusBarWhite(yes : Boolean){
         if (yes){

@@ -10,3 +10,11 @@ object BottomNavigation {
 object Navigation {
     const val NUM_OF_ROOT_FRAGMENT = 4
 }
+
+object Network {
+    const val BASE_URL = "http://louvre.codes:1337/"
+}
+
+object Persistence {
+    const val DB_NAME = "louvre-db"
+}

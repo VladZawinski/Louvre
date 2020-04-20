@@ -7,6 +7,7 @@ import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavSwitchController
 import com.ncapdevi.fragnav.FragNavTransactionOptions
 import com.ncapdevi.fragnav.tabhistory.UnlimitedTabHistoryStrategy
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.activity.BaseActivity
@@ -27,6 +28,7 @@ class MainActivity : BaseActivity(),FragNavController.RootFragmentListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        AndroidInjection.inject(this)
         wantToMakeStatusBarWhite(yes = true)
         InitBottomNavigation()
         InitNavigation()
