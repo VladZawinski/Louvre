@@ -3,6 +3,7 @@ package non.shahad.stayhomegallery.ui.recyclerviewutils
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 class RecyclerViewPaginator(
     private val recyclerView: RecyclerView,
@@ -14,7 +15,7 @@ class RecyclerViewPaginator(
     var threshold = 10
     var currentPage: Int = 0
 
-    var endWithAuto = false
+    var endWithAuto = true
 
     init {
         recyclerView.addOnScrollListener(this)
@@ -30,6 +31,7 @@ class RecyclerViewPaginator(
             val firstVisibleItemPosition = when (layoutManager) {
                 is LinearLayoutManager -> layoutManager.findLastVisibleItemPosition()
                 is GridLayoutManager -> layoutManager.findLastVisibleItemPosition()
+                is StaggeredGridLayoutManager -> layoutManager.findLastVisibleItemPositions(null)[0]
                 else -> return
             }
 

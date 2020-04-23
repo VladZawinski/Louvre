@@ -9,7 +9,7 @@ object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     }
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem.color == newItem.color
+        return oldItem.color == newItem.color && oldItem.img.low == newItem.img.low
 
     }
 }

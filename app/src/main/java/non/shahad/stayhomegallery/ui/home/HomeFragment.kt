@@ -6,33 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.haroldadmin.cnradapter.NetworkResponse
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
-import non.shahad.stayhomegallery.data.remote.LouvreAPI
+import non.shahad.stayhomegallery.data.local.mapper.mapToBookmark
 import non.shahad.stayhomegallery.di.ViewModelFactory
 import non.shahad.stayhomegallery.ui.recyclerviewutils.RecyclerViewPaginator
+import non.shahad.stayhomegallery.utils.ext.switchToDetail
 import non.shahad.stayhomegallery.utils.ext.timberD
 import non.shahad.stayhomegallery.utils.ext.toast
 import non.shahad.stayhomegallery.utils.network.Status
+import java.io.File
 import javax.inject.Inject
 
 
 class HomeFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by injectViewModels<HomeViewModel>()
 
-    private lateinit var viewModel : HomeViewModel
-
-    private val delegate by lazy {HomeAdapterDelegation()}
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this,viewModelFactory).get(HomeViewModel::class.java)
-    }
+    private lateinit var delegate : HomeAdapterDelegation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,25 +39,29 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAdapter()
         initiateRecyclerView()
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.fetchUnsplash(1)
 
-        viewModel.unsplashResponse.observe(this, Observer {
-            when(it){
-                is NetworkResponse.Success -> {
-                    delegate.insertItems(it.body.posts)
-                }
-                is NetworkResponse.NetworkError -> {
+        viewModel.unsplashResponse.observe(viewLifecycleOwner, Observer {
+            when(it.status){
+
+                Status.SUCCESS -> {
+                    lifecycleScope.launch {
+                        delay(1000)
+                        delegate.insertItems(lifecycleScope,it.data!!)
+                    }
 
                 }
-                is NetworkResponse.ServerError -> {}
+                Status.ERROR -> requireContext().toast(it.message!!)
             }
         })
+
+        viewModel.fetchUnsplashStore(1)
+
     }
 
     private fun initiateRecyclerView(){
@@ -72,13 +71,27 @@ class HomeFragment : BaseFragment() {
             RecyclerViewPaginator(
                 this,
                 isLoading = {viewModel.isLoading},
-                loadMore = {viewModel.fetchUnsplash(it.toLong())},
+                loadMore = {
+                    viewModel.fetchUnsplashStore(it.toLong())
+                },
                 onLast = {false}
             ).apply {
-                threshold = 3
+                threshold = 1
                 currentPage = 1
             }
         }
+    }
+
+    private fun initAdapter(){
+        delegate = HomeAdapterDelegation(
+            onFavoriteClick = {post, b ->
+                viewModel.insertIntoBookmark(post.mapToBookmark())
+            },
+            onRootClick = {
+                requireContext().switchToDetail()
+            }
+        )
+
     }
 
     companion object {

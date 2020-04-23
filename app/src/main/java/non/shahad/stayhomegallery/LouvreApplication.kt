@@ -1,5 +1,6 @@
 package non.shahad.stayhomegallery
 
+import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import non.shahad.stayhomegallery.di.components.DaggerAppComponent
@@ -10,15 +11,12 @@ class LouvreApplication() : DaggerApplication(){
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-
+        Stetho.initializeWithDefaults(this);
     }
 
     private val appComponent = DaggerAppComponent
-        .builder()
-        .application(this)
-        .build()
+        .factory().create(this)
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return appComponent
-    }
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = appComponent
+
 }

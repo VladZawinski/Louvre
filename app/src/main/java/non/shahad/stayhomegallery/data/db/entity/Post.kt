@@ -10,7 +10,7 @@ import com.squareup.moshi.Json
 data class Post (
     @PrimaryKey
     @field:Json(name = "original_id")
-    val originalId : String,
+    var originalId : String,
 
     @ColumnInfo(name = "width")
     @field:Json(name = "width")val width : Long,
@@ -40,7 +40,10 @@ data class Post (
     @field:Json(name = "img")val img : Img,
 
     @ColumnInfo(name = "page")
-    var page : Long
+    var page : Long,
+
+    @ColumnInfo(name = "is_bookmark")
+    var isBookmark : Boolean = false
 )
 
 data class Img(

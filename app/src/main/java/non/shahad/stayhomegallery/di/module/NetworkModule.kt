@@ -1,5 +1,6 @@
 package non.shahad.stayhomegallery.di.module
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,9 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient() : OkHttpClient{
-        return OkHttpClient.Builder().build()
+        return OkHttpClient.Builder()
+            .addNetworkInterceptor(StethoInterceptor())
+            .build()
     }
 
     @Singleton

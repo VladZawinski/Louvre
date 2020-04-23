@@ -1,18 +1,36 @@
 package non.shahad.stayhomegallery.ui.home
 
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
+import kotlinx.coroutines.*
 import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.utils.diffcallbacks.PostDiffCallback
 
-class HomeAdapterDelegation() : AsyncListDifferDelegationAdapter<Post>(PostDiffCallback){
+class HomeAdapterDelegation(
+    onFavoriteClick : (Post,Boolean) -> Unit,
+    onRootClick : (Post) -> Unit
+) : AsyncListDifferDelegationAdapter<Post>(PostDiffCallback){
+
     init {
-        delegatesManager.addDelegate(PostAdapterDelegate())
+        delegatesManager.addDelegate(PostAdapterDelegate(onFavoriteClick,onRootClick))
     }
 
-    fun insertItems(posts : List<Post>){
-        val newList = ArrayList<Post>()
-        newList.addAll(items)
-        newList.addAll(posts)
-        items = newList
+    /**
+     * Enhance performance while sorting list
+     * you can use suspend tho(but buggy)
+     */
+    fun insertItems(coroutineScope: CoroutineScope, posts : List<Post>){
+        coroutineScope.launch {
+
+            val result = withContext(Dispatchers.Default){
+                val local = mutableListOf<Post>()
+                local.addAll(items)
+                local.addAll(posts)
+                return@withContext local
+            }
+
+            items = result
+        }
+
     }
+
 }

@@ -1,7 +1,6 @@
-package non.shahad.stayhomegallery.ui.home
+package non.shahad.stayhomegallery.ui.favorite
 
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
@@ -10,13 +9,12 @@ import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.databinding.PostGridItemBinding
 import non.shahad.stayhomegallery.utils.ext.bindedView
 
-class PostAdapterDelegate(
-    val onFavoriteClick : (Post,Boolean) -> Unit,
-    val onRootClick : (Post) -> Unit
-) : AdapterDelegate<List<Post>>() {
+class FavoriteAdapterDelegate (
+    val onFavoriteClick : (Post,Boolean) -> Unit
+): AdapterDelegate<List<Post>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return PostViewHolder(bindedView(parent,R.layout.post_grid_item) as PostGridItemBinding)
+        return PostViewHolder(bindedView(parent, R.layout.post_grid_item) as PostGridItemBinding)
     }
 
     override fun isForViewType(items: List<Post>, position: Int): Boolean {
@@ -32,33 +30,20 @@ class PostAdapterDelegate(
         (holder as PostViewHolder).bind(items[position])
     }
 
-   inner class PostViewHolder(val binding : PostGridItemBinding) : RecyclerView.ViewHolder(binding.root) {
-       private val set = ConstraintSet()
-
+    /**
+     * Will use External class instead of Inner to avoid boilerplate
+     */
+    inner class PostViewHolder(val binding : PostGridItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post : Post){
-
             binding.favorite.setOnClickListener {
-                onFavoriteClick(post,true)
-            }
-
-            binding.mConstraintLayout.setOnClickListener {
-                onRootClick(post)
+                onFavoriteClick(post,false)
             }
 
             Glide
                 .with(binding.root.context)
                 .load(post.img.low)
+                .override(1080,720)
                 .into(binding.postImage)
-
-            val ratio = String.format("%d:%d",post.width,post.height)
-            set.clone(binding.mConstraintLayout)
-            set.setDimensionRatio(binding.postImage.id,ratio)
-            set.applyTo(binding.mConstraintLayout)
-
-
         }
     }
-
-
-
 }

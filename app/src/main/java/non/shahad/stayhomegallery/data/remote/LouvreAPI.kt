@@ -13,6 +13,6 @@ interface LouvreAPI {
     @GET("api/unsplash/{page}")
     suspend fun getUnsplashImages(
         @Path("page") page : Long
-    ) : NetworkResponse<UnsplashResponse,ErrorResponse>
+    ) : UnsplashResponse
 
 }
