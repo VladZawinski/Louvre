@@ -9,4 +9,13 @@
     <color name="cyan">#00e0c7</color>
     <color name="dark_cyan">#009394</color>
     <color name="very_dark_cyan">#006270</color>
+
+    <color name="very_basic_grey">#7e7e7e</color>
+    <color name="basic_grey">#626262</color>
+    <color name="second_basic_grey">#758184</color>
+    <color name="darkerGrey">#515151</color>
+    <color name="ver_darker_grey">#3b3b3b</color>
+    <color name="darkestGrey">#282828</color>
+    <color name="very_darkest_grey">#222222</color>
+
 </resources>

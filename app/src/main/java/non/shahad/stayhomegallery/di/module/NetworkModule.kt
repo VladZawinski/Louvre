@@ -1,7 +1,6 @@
 package non.shahad.stayhomegallery.di.module
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import dagger.Module
 import dagger.Provides
 import non.shahad.stayhomegallery.data.remote.LouvreAPI
@@ -27,7 +26,6 @@ class NetworkModule {
     fun provideRetrofit(client : OkHttpClient) : Retrofit{
         return Retrofit.Builder()
             .baseUrl(Network.BASE_URL)
-            .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()

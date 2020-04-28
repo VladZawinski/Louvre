@@ -1,11 +1,14 @@
 package non.shahad.stayhomegallery.data.db.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "post")
 data class Post (
     @PrimaryKey
@@ -39,14 +42,32 @@ data class Post (
     @Embedded
     @field:Json(name = "img")val img : Img,
 
+    @Embedded
+    @field:Json(name ="user")val user : User,
+
     @ColumnInfo(name = "page")
     var page : Long,
 
     @ColumnInfo(name = "is_bookmark")
     var isBookmark : Boolean = false
-)
+) : Parcelable
 
+@Parcelize
 data class Img(
     @field:Json(name = "high")val high : String,
     @field:Json(name = "low")val low : String
-)
+) : Parcelable
+
+@Parcelize
+data class User(
+    @field:Json(name ="bio")val bio: String? = "No Bio",
+    @field:Json(name ="id")val id: String,
+    @field:Json(name ="instagram_username")val instagramName: String? = "NaN",
+    @field:Json(name ="name")val name: String,
+    @field:Json(name ="portfolio_url")val portfolioUrl: String? = "NaN",
+    @field:Json(name ="profile_image")val profileImage: String,
+    @field:Json(name ="total_likes")val totalLikes: Int,
+    @field:Json(name ="total_photos")val totalPhotos: Int,
+    @field:Json(name ="twitter_username")val twitterUsername: String? = "NaN",
+    @field:Json(name ="username")val username: String
+) : Parcelable

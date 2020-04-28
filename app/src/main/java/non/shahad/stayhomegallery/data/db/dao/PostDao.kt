@@ -12,7 +12,7 @@ abstract class PostDao {
     @Insert
     abstract suspend fun insertEach(post : Post)
 
-    @Query("SELECT * FROM post WHERE page = :page AND NOT is_bookmark")
+    @Query("SELECT * FROM post WHERE page = :page")
     abstract fun getPostsByPage(page : Long) : Flow<List<Post>>
 
     @Query("DELETE FROM post WHERE page = :page")
@@ -20,6 +20,9 @@ abstract class PostDao {
 
     @Query("DELETE FROM post")
     abstract suspend fun deleteAll()
+
+    @Query("DELETE FROM post WHERE NOT is_bookmark")
+    abstract suspend fun deleteAllExcludeBookmark()
 
     @Transaction
     open suspend fun insertByPage(page : Long,posts: List<Post>){

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +31,8 @@ class HomeFragment : BaseFragment() {
 
     private lateinit var delegate : HomeAdapterDelegation
 
+    private lateinit var paginator : RecyclerViewPaginator
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,10 +45,13 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initiateRecyclerView()
+        swipeToRefresh()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        viewModel.fetchUnsplashStore(1)
 
         viewModel.unsplashResponse.observe(viewLifecycleOwner, Observer {
             when(it.status){
@@ -60,15 +67,30 @@ class HomeFragment : BaseFragment() {
             }
         })
 
-        viewModel.fetchUnsplashStore(1)
+        viewModel.freshResponse.observe(viewLifecycleOwner, Observer {
+            timberD("Current","${paginator.currentPage}")
+            delegate.items = it
+            swipeRefresh.isRefreshing = false
+            paginator.resetCurrentPage()
+            timberD("Current","${paginator.currentPage}")
+        })
 
+    }
+
+    private fun swipeToRefresh(){
+        swipeRefresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
+            override fun onRefresh() {
+                viewModel.refresh()
+            }
+
+        })
     }
 
     private fun initiateRecyclerView(){
         homeRecyclerView.apply {
             adapter = delegate
 
-            RecyclerViewPaginator(
+            paginator = RecyclerViewPaginator(
                 this,
                 isLoading = {viewModel.isLoading},
                 loadMore = {
@@ -84,14 +106,10 @@ class HomeFragment : BaseFragment() {
 
     private fun initAdapter(){
         delegate = HomeAdapterDelegation(
-            onFavoriteClick = {post, b ->
-                viewModel.insertIntoBookmark(post.mapToBookmark())
-            },
-            onRootClick = {
-                requireContext().switchToDetail()
+            onRootClick = { post,view ->
+                requireContext().switchToDetail(activity as AppCompatActivity,post = post,sharedElement = view)
             }
         )
-
     }
 
     companion object {

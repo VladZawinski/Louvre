@@ -6,5 +6,6 @@
         tools:override="true">12sp</dimen>
 
     <dimen name="home_banner_title">20sp</dimen>
+    <dimen name="bottomsheet_icon_width_height">24dp</dimen>
 
 </resources>

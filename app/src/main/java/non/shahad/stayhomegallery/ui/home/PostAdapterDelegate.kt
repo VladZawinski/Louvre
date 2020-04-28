@@ -1,5 +1,6 @@
 package non.shahad.stayhomegallery.ui.home
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
@@ -9,10 +10,10 @@ import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.databinding.PostGridItemBinding
 import non.shahad.stayhomegallery.utils.ext.bindedView
+import non.shahad.stayhomegallery.utils.ext.visible
 
 class PostAdapterDelegate(
-    val onFavoriteClick : (Post,Boolean) -> Unit,
-    val onRootClick : (Post) -> Unit
+    val onRootClick : (Post,View) -> Unit
 ) : AdapterDelegate<List<Post>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -37,12 +38,8 @@ class PostAdapterDelegate(
 
         fun bind(post : Post){
 
-            binding.favorite.setOnClickListener {
-                onFavoriteClick(post,true)
-            }
-
             binding.mConstraintLayout.setOnClickListener {
-                onRootClick(post)
+                onRootClick(post,it)
             }
 
             Glide

@@ -48,6 +48,6 @@ class RecyclerViewPaginator(
     }
 
     fun resetCurrentPage() {
-        this.currentPage = 0
+        this.currentPage = 1
     }
 }

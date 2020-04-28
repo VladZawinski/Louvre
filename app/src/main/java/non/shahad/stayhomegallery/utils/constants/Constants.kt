@@ -12,9 +12,17 @@ object Navigation {
 }
 
 object Network {
-    const val BASE_URL = "http://louvre.codes:1337/"
+    const val BASE_URL = "http://louvre.codes:1337/api/v1/"
 }
 
 object Persistence {
     const val DB_NAME = "louvre-db"
+}
+
+object Bundles {
+    const val POST_EXTRA = "post-extra"
+}
+
+object ViewConstants {
+    const val PHOTO_SHARED_ELEMENT_NAME = "photo"
 }

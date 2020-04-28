@@ -4,13 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import non.shahad.stayhomegallery.data.db.entity.Bookmark
 import non.shahad.stayhomegallery.data.db.entity.Post
 
 @Dao
 abstract class BookmarkDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertIntoBookmark(post: Post)
+    abstract fun insertIntoBookmark(bookmark: Bookmark)
 
-    @Query("SELECT * FROM post WHERE is_bookmark")
-    abstract fun getAllBookmarks() : List<Post>
+    @Query("SELECT * FROM bookmark WHERE is_bookmark")
+    abstract fun getAllBookmarks() : List<Bookmark>
 }

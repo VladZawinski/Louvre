@@ -2,11 +2,8 @@ package non.shahad.stayhomegallery.ui.home
 
 import androidx.lifecycle.*
 import com.dropbox.android.external.store4.*
-import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.*
 import non.shahad.stayhomegallery.data.db.entity.Post
-import non.shahad.stayhomegallery.data.model.ErrorResponse
-import non.shahad.stayhomegallery.data.model.UnsplashResponse
 import non.shahad.stayhomegallery.data.repository.BookmarkRepository
 import non.shahad.stayhomegallery.data.repository.PostRepository
 import non.shahad.stayhomegallery.utils.ext.timberD
@@ -20,6 +17,8 @@ class HomeViewModel @Inject constructor(
 
     var isLoading = false
     val unsplashResponse = MutableLiveData<Resource<List<Post>>>()
+
+    val freshResponse = MutableLiveData<List<Post>>()
 
     fun fetchUnsplashStore(page : Long){
         isLoading = true
@@ -46,9 +45,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun insertIntoBookmark(post: Post){
+    @ExperimentalStoreApi
+    fun refresh(){
+        isLoading = true
         viewModelScope.launch {
-            bookmarkRepo.insertIntoBookmark(post)
+            try {
+                postRepo.deleteAllCache()
+                val cache = postRepo.fetchUnsplash(1).get(1)
+                freshResponse.postValue(cache)
+                val fresh = postRepo.fetchUnsplash(1).fresh(1)
+                freshResponse.postValue(fresh)
+                isLoading = false
+            }catch (e : Throwable){
+                timberD("Home_","$e")
+                isLoading = false
+            }
         }
     }
+
 }

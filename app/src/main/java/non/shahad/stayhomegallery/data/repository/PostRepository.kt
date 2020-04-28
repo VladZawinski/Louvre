@@ -1,8 +1,10 @@
 package non.shahad.stayhomegallery.data.repository
 
-import com.dropbox.android.external.store4.MemoryPolicy
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreBuilder
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.dropbox.android.external.store4.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import non.shahad.stayhomegallery.data.db.dao.PostDao
 import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.data.model.UnsplashResponse
@@ -32,6 +34,16 @@ class PostRepository @Inject constructor(
             delete = dao::deletePostsByPage,
             deleteAll = dao::deleteAll
         ).build()
+    }
+
+    @ExperimentalStoreApi
+    suspend fun deleteAllCache() = fetchUnsplash(1).clearAll()
+
+    suspend fun refresh() : List<Post> = withContext(Dispatchers.IO){
+        // Delete all cache
+//        dao.deleteAllExcludeBookmark()
+
+        return@withContext fetchUnsplash(1).fresh(1)
     }
 
 

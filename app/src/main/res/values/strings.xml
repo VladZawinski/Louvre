@@ -4,7 +4,11 @@
     <string name="explore">Explore</string>
     <string name="collections">Collections</string>
     <string name="favorite">Favorite</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="collections_title">Collections</string>
+    <string name="likes_title">Likes</string>
+    <string name="photos_title">Photos</string>
+    <string name="share">Share</string>
+    <string name="search">Search</string>
+    <string name="explore_title">Photos, Tags, or Collections</string>
 </resources>

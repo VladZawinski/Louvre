@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_photo</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -14,5 +16,24 @@
         parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/sans_black_family</item>
     </style>
+
+    <style name="BottomSheetUsernameStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="fontFamily">@font/sans_black_family</item>
+    </style>
+
+    <style name="BottomSheetLikesTitleStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/darkerGrey</item>
+        <item name="fontFamily">@font/sans_regular_family</item>
+    </style>
+
+    <style name="BottomSheetPrefTitleStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="fontFamily">@font/sans_black_family</item>
+    </style>
+
 
 </resources>
