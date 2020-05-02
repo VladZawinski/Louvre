@@ -2,6 +2,8 @@ package non.shahad.stayhomegallery.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -31,9 +33,9 @@ class DetailActivity : BaseActivity(),View.OnClickListener {
         post = intent.extras?.getParcelable<Post>(Bundles.POST_EXTRA)!!
 
         bindData()
+        observerTransactionStatus()
+        considerBookmarkOrNot()
         setOnClickListener()
-        onBookmark()
-        onBack()
     }
 
     private fun setOnClickListener(){
@@ -45,16 +47,45 @@ class DetailActivity : BaseActivity(),View.OnClickListener {
         binding.bottomseet.user = post.user
     }
 
+    private fun observerTransactionStatus(){
+        viewModel.transactionStatus.observe(this, Observer {
+            when(it){
+                true -> {
+//                    toast("Bookmark Success")
+                }
+                false -> {
+//                    toast("Remove from bookmark")
+                }
+            }
+        })
+    }
+
+
+    private fun considerBookmarkOrNot(){
+        viewModel.considerBookmark(postId = post.originalId)
+        viewModel.isAlreadyBookmaked.observe(this, Observer {
+            post.isBookmark = it
+            if (it){
+                onBookmark()
+            }
+        })
+    }
+
     private fun onBookmark(){
-        binding.topbar.favoriteBtn.setOnClickListener {
-            viewModel.insertIntoBookmark(post.mapToBookmark())
-            toast("Successfully added to favorite")
+        post.isBookmark = true
+        binding.topbar.apply {
+            this.favoriteBtn.setBackgroundColor(ContextCompat.getColor(this@DetailActivity,R.color.transparent_cyan))
+//            this.favoriteBtn.backgroundTintList = ContextCompat
+//                .getColorStateList(this@DetailActivity,R.color.transparent_cyan)
+            this.favoriteIcon.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity,R.drawable.ic_heart_rounded))
         }
     }
 
-    private fun onBack(){
-        binding.topbar.backBtn.setOnClickListener {
-            supportFinishAfterTransition()
+    private fun onRemove(){
+        post.isBookmark = false
+        binding.topbar.apply {
+            this.favoriteBtn.background = ContextCompat.getDrawable(this@DetailActivity,R.drawable.detail_btn_style)
+            this.favoriteIcon.setImageDrawable(ContextCompat.getDrawable(this@DetailActivity,R.drawable.ic_heart))
         }
     }
 
@@ -85,5 +116,23 @@ class DetailActivity : BaseActivity(),View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.favoriteBtn -> {
+                if (!post.isBookmark){
+                    onBookmark()
+                    viewModel.insertIntoBookmark(post.mapToBookmark())
+                }else {
+                    onRemove()
+                    viewModel.removeFromBookmark(post.originalId)
+                }
+            }
+            R.id.shareBtn -> {
+                toast("Share")
+            }
+            R.id.backBtn -> {
+                this.finish()
+            }
+        }
+
     }
 }

@@ -5,14 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
+import non.shahad.stayhomegallery.data.local.mapper.mapToPost
 import non.shahad.stayhomegallery.di.ViewModelFactory
 import non.shahad.stayhomegallery.ui.home.HomeAdapterDelegation
 import non.shahad.stayhomegallery.ui.home.HomeViewModel
+import non.shahad.stayhomegallery.utils.ext.switchToDetail
 import javax.inject.Inject
 
 
@@ -56,9 +59,14 @@ class FavoriteFragment : BaseFragment() {
     }
 
     private fun initAdapter(){
-        delegate = FavoriteAdapterDelegation { post, isbookmark ->
+        delegate = FavoriteAdapterDelegation(
+            onFavoriteClick =  { bookmark, isbookmark ->
 
-        }
+        },
+            onRootClick = {bookmark,view  ->
+                context?.switchToDetail((context as AppCompatActivity),bookmark.mapToPost(),view)
+            }
+        )
     }
 
     private fun initRecyclerView(){

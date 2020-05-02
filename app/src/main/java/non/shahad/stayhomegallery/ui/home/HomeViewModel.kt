@@ -4,15 +4,13 @@ import androidx.lifecycle.*
 import com.dropbox.android.external.store4.*
 import kotlinx.coroutines.*
 import non.shahad.stayhomegallery.data.db.entity.Post
-import non.shahad.stayhomegallery.data.repository.BookmarkRepository
 import non.shahad.stayhomegallery.data.repository.PostRepository
 import non.shahad.stayhomegallery.utils.ext.timberD
 import non.shahad.stayhomegallery.utils.network.Resource
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val postRepo : PostRepository,
-    private val bookmarkRepo : BookmarkRepository
+    private val postRepo : PostRepository
 ) : ViewModel() {
 
     var isLoading = false
@@ -25,14 +23,20 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // Cache
-                val posts = postRepo.fetchUnsplash(page).get(page)
+                val posts = withContext(Dispatchers.IO){
+                    postRepo.fetchUnsplash(page).get(page)
+                }
+
                 if (posts.isNotEmpty()){
                     unsplashResponse.postValue(Resource.success(posts))
                     isLoading = false
                     return@launch
                 }
 
-                val fresh = postRepo.fetchUnsplash(page).fresh(page)
+                val fresh = withContext(Dispatchers.IO){
+                    postRepo.fetchUnsplash(page).fresh(page)
+                }
+
                 unsplashResponse.postValue(Resource.success(fresh))
                 isLoading = false
 
@@ -49,16 +53,15 @@ class HomeViewModel @Inject constructor(
     fun refresh(){
         isLoading = true
         viewModelScope.launch {
-            try {
-                postRepo.deleteAllCache()
+            isLoading = try {
                 val cache = postRepo.fetchUnsplash(1).get(1)
                 freshResponse.postValue(cache)
                 val fresh = postRepo.fetchUnsplash(1).fresh(1)
                 freshResponse.postValue(fresh)
-                isLoading = false
+                false
             }catch (e : Throwable){
                 timberD("Home_","$e")
-                isLoading = false
+                false
             }
         }
     }

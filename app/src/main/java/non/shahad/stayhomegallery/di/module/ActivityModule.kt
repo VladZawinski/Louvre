@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import non.shahad.stayhomegallery.di.scope.ActivityScope
 import non.shahad.stayhomegallery.ui.detail.DetailActivity
 import non.shahad.stayhomegallery.ui.main.MainActivity
+import non.shahad.stayhomegallery.ui.search.SearchActivity
 
 @Module(includes = [
     ViewModelModule::class
@@ -18,4 +19,8 @@ abstract class ActivityModule {
     @ActivityScope
     @ContributesAndroidInjector()
     internal abstract fun detailActivity(): DetailActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    internal abstract fun searchActivity(): SearchActivity
 }

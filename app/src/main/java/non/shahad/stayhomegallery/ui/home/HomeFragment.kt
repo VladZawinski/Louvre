@@ -58,7 +58,7 @@ class HomeFragment : BaseFragment() {
 
                 Status.SUCCESS -> {
                     lifecycleScope.launch {
-                        delay(1000)
+                        delay(500)
                         delegate.insertItems(lifecycleScope,it.data!!)
                     }
 
@@ -68,11 +68,9 @@ class HomeFragment : BaseFragment() {
         })
 
         viewModel.freshResponse.observe(viewLifecycleOwner, Observer {
-            timberD("Current","${paginator.currentPage}")
             delegate.items = it
             swipeRefresh.isRefreshing = false
             paginator.resetCurrentPage()
-            timberD("Current","${paginator.currentPage}")
         })
 
     }

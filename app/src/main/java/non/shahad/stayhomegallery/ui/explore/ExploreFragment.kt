@@ -1,17 +1,16 @@
 package non.shahad.stayhomegallery.ui.explore
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_explore.*
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
+import non.shahad.stayhomegallery.utils.ext.switchToSearchActivity
 import non.shahad.stayhomegallery.utils.ext.timberD
-import non.shahad.stayhomegallery.utils.ext.timberE
-
 
 class ExploreFragment : BaseFragment() {
 
@@ -31,14 +30,19 @@ class ExploreFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpAdapter()
         setUpRecyclerView()
+
+        exploreSearchBar.windowToken
+
+        exploreSearchBar.setOnClickListener{
+            context?.switchToSearchActivity(requireActivity() as AppCompatActivity,it)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchCollection(2)
+        viewModel.fetchCollection()
         viewModel.collectionResponse.observe(viewLifecycleOwner, Observer {
-            timberD("Explore_","$it")
             delegate.items = it
         })
     }
@@ -59,4 +63,5 @@ class ExploreFragment : BaseFragment() {
         fun newInstance() =
             ExploreFragment()
     }
+
 }

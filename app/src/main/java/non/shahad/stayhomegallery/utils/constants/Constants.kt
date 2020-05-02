@@ -25,4 +25,5 @@ object Bundles {
 
 object ViewConstants {
     const val PHOTO_SHARED_ELEMENT_NAME = "photo"
+    const val SEARCH_SHARED_ELEMENT_NAME = "searchbar"
 }

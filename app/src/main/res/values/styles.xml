@@ -35,5 +35,13 @@
         <item name="fontFamily">@font/sans_black_family</item>
     </style>
 
+    <style name="ToolbarTitleStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textSize">@dimen/toolbar_title_size</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/sans_black_family</item>
+    </style>
 
 </resources>

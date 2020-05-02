@@ -2,10 +2,7 @@ package non.shahad.stayhomegallery.data.remote
 
 import non.shahad.stayhomegallery.data.model.CollectionResponse
 import non.shahad.stayhomegallery.data.model.UnsplashResponse
-import retrofit2.Response
-
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface LouvreAPI {

@@ -1,20 +1,19 @@
-package non.shahad.stayhomegallery.ui.explore
+package non.shahad.stayhomegallery.ui.collections
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
-import com.hannesdorfmann.adapterdelegates4.R
+import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.data.db.entity.Collection
-import non.shahad.stayhomegallery.databinding.ExploreCollectionItemBinding
+import non.shahad.stayhomegallery.databinding.CollectionsItemBinding
 import non.shahad.stayhomegallery.utils.ext.bindedView
 
-class CollectionAdapterDelegate : AdapterDelegate<List<Collection>>(){
+class CollectionsAdapterDelegate(
+    val onRootClick : (Collection) -> Unit
+) : AdapterDelegate<List<Collection>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return CollectionItemViewHolder(
-            bindedView(parent,non.shahad.stayhomegallery.R.layout.explore_collection_item)
-            as ExploreCollectionItemBinding
-        )
+        return CollectionsViewHolder(bindedView(parent,R.layout.collections_item) as CollectionsItemBinding)
     }
 
     override fun isForViewType(items: List<Collection>, position: Int): Boolean {
@@ -27,17 +26,19 @@ class CollectionAdapterDelegate : AdapterDelegate<List<Collection>>(){
         holder: RecyclerView.ViewHolder,
         payloads: MutableList<Any>
     ) {
-        (holder as CollectionItemViewHolder).bind(items[position])
+        (holder as CollectionsViewHolder).bind(items[position])
     }
 
-    inner class CollectionItemViewHolder(
-        val binding : ExploreCollectionItemBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class CollectionsViewHolder(private val binding : CollectionsItemBinding) :
+        RecyclerView.ViewHolder(binding.root){
 
         fun bind(collection: Collection){
-            binding.preview = collection
-            binding.palette = binding.overlayView
-            binding.executePendingBindings()
-        }
-    }
+            binding.root.setOnClickListener {
+                onRootClick(collection)
+            }
 
+            binding.preview = collection
+        }
+
+    }
 }

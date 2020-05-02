@@ -15,10 +15,10 @@ class ExploreViewModel @Inject constructor(
 
     val collectionResponse = MutableLiveData<List<Collection>>()
 
-    fun fetchCollection(page : Long) {
+    fun fetchCollection() {
         viewModelScope.launch {
             try {
-                val result = repo.collectionStore(page)
+                val result = repo.fetchCollectionForExplore()
                 collectionResponse.value = result.collections
             }catch (e : Throwable){
                 timberE("Explore_","$e")

@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_anchorGravity="top"
+        app:elevation="2dp"
         layout="@layout/detail_topbar"/>
 
 

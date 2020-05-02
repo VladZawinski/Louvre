@@ -21,3 +21,21 @@ fun Post.mapToBookmark() : Bookmark{
     )
 
 }
+
+fun Bookmark.mapToPost() : Post{
+    return Post(
+        this.originalId,
+        this.width,
+        this.height,
+        this.description,
+        this.altDescription,
+        this.from,
+        this.color,
+        this.likes,
+        this.img,
+        this.user,
+        this.page,
+        true
+    )
+
+}

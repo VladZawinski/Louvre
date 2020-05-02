@@ -1,5 +1,6 @@
 package non.shahad.stayhomegallery.ui.favorite
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,6 +13,7 @@ import non.shahad.stayhomegallery.utils.ext.bindedView
 import non.shahad.stayhomegallery.utils.ext.visible
 
 class FavoriteAdapterDelegate (
+    val onRootClick : (Bookmark,View) -> Unit,
     val onFavoriteClick : (Bookmark,Boolean) -> Unit
 ): AdapterDelegate<List<Bookmark>>() {
 
@@ -37,6 +39,10 @@ class FavoriteAdapterDelegate (
         fun bind(post : Bookmark){
 
             binding.removeBtn.visible()
+
+            binding.root.setOnClickListener {
+                onRootClick(post,binding.postImage)
+            }
 
             Glide
                 .with(binding.root.context)

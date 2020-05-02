@@ -20,3 +20,4 @@ fun bindCircleImageView(imageView: CircleImageView,url : String){
         .load(_url)
         .into(imageView)
 }
+

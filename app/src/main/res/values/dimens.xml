@@ -5,7 +5,7 @@
     <dimen name="design_bottom_navigation_active_text_size"
         tools:override="true">12sp</dimen>
 
-    <dimen name="home_banner_title">20sp</dimen>
+    <dimen name="toolbar_title_size">22sp</dimen>
     <dimen name="bottomsheet_icon_width_height">24dp</dimen>
 
 </resources>

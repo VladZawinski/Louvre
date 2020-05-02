@@ -22,7 +22,7 @@ data class Collection(
 
     @PrimaryKey
     @field:Json(name = "id")
-    @ColumnInfo(name= "id")
+    @ColumnInfo(name= "collection_id")
     val id: Int,
 
     @Embedded
@@ -41,7 +41,10 @@ data class Collection(
     val totalPhotos: Int,
 
     @Embedded
-    val user: User
+    val user: User,
+
+    @ColumnInfo(name = "page")
+    var page : Long
 )
 
 data class Links(

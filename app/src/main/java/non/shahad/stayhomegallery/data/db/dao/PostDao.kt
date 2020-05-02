@@ -21,8 +21,6 @@ abstract class PostDao {
     @Query("DELETE FROM post")
     abstract suspend fun deleteAll()
 
-    @Query("DELETE FROM post WHERE NOT is_bookmark")
-    abstract suspend fun deleteAllExcludeBookmark()
 
     @Transaction
     open suspend fun insertByPage(page : Long,posts: List<Post>){

@@ -14,7 +14,15 @@ class BookmarkRepository @Inject constructor(
         return@withContext bookmarkDao.insertIntoBookmark(bookmark)
     }
 
+    suspend fun removeFromBookmark(id : String) = withContext(Dispatchers.Default){
+        return@withContext bookmarkDao.removeFromBookmark(id)
+    }
+
     suspend fun getAllBookmarks() : List<Bookmark> = withContext(Dispatchers.Default){
         return@withContext bookmarkDao.getAllBookmarks()
+    }
+
+    suspend fun isAlreadyBookmark(postId : String) : Boolean= withContext(Dispatchers.Default){
+        return@withContext bookmarkDao.getBookmarkById(postId) != null
     }
 }

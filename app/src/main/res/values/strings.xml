@@ -10,5 +10,7 @@
     <string name="photos_title">Photos</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
+    <string name="search_title_hint">Watcha gonna want?</string>
     <string name="explore_title">Photos, Tags, or Collections</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -9,6 +9,7 @@
     <color name="cyan">#00e0c7</color>
     <color name="dark_cyan">#009394</color>
     <color name="very_dark_cyan">#006270</color>
+    <color name="transparent_cyan">#3300A5BC</color>
 
     <color name="very_basic_grey">#7e7e7e</color>
     <color name="basic_grey">#626262</color>

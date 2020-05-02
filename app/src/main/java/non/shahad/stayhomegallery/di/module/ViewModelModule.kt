@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import non.shahad.stayhomegallery.di.ViewModelFactory
 import non.shahad.stayhomegallery.di.ViewModelKey
+import non.shahad.stayhomegallery.ui.collections.CollectionsViewModel
 import non.shahad.stayhomegallery.ui.detail.DetailViewModel
 import non.shahad.stayhomegallery.ui.explore.ExploreViewModel
 import non.shahad.stayhomegallery.ui.favorite.FavoriteViewModel
@@ -37,5 +38,10 @@ abstract class ViewModelModule {
     @Binds
     @ViewModelKey(ExploreViewModel::class)
     abstract fun provideExploreViewModel(exploreViewModel: ExploreViewModel): ViewModel
+
+    @IntoMap
+    @Binds
+    @ViewModelKey(CollectionsViewModel::class)
+    abstract fun provideCollectionsViewModel(collectionsViewModel: CollectionsViewModel): ViewModel
 
 }
