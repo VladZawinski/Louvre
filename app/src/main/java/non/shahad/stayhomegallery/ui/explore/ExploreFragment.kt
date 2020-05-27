@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_explore.*
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
+import non.shahad.stayhomegallery.utils.ext.switchToCollectionDetail
+import non.shahad.stayhomegallery.utils.ext.switchToDetail
 import non.shahad.stayhomegallery.utils.ext.switchToSearchActivity
 import non.shahad.stayhomegallery.utils.ext.timberD
 
@@ -41,7 +43,7 @@ class ExploreFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchCollection()
+        viewModel.fetchCollection(rand(1,10))
         viewModel.collectionResponse.observe(viewLifecycleOwner, Observer {
             delegate.items = it
         })
@@ -54,7 +56,14 @@ class ExploreFragment : BaseFragment() {
     }
 
     private fun setUpAdapter(){
-        delegate = ExploreAdapterDelegation()
+        delegate = ExploreAdapterDelegation(){
+            context!!.switchToCollectionDetail(it)
+        }
+    }
+
+    private fun rand(start: Int,end: Int) : Long{
+        require(start <= end) {"Illegal Argument"}
+        return (start..end).random().toLong()
     }
 
     companion object {

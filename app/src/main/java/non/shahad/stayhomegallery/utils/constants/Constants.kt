@@ -17,10 +17,22 @@ object Network {
 
 object Persistence {
     const val DB_NAME = "louvre-db"
+    const val PREF_NAME = "louvre-kv"
+    const val ORDER_KEY = "order-by"
+}
+
+object SortByReq {
+    const val TRENDING = 1
+    const val LATEST = 0
+    const val OLDEST = 2
 }
 
 object Bundles {
     const val POST_EXTRA = "post-extra"
+}
+
+object ExtraKeys{
+    const val COLLECTION_ID_KEY = "collection-id"
 }
 
 object ViewConstants {

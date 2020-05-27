@@ -13,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
 data class Post (
     @PrimaryKey
     @field:Json(name = "original_id")
-    var originalId : String,
+    var originalId : String = "",
 
     @ColumnInfo(name = "width")
     @field:Json(name = "width")val width : Long,
@@ -49,7 +49,16 @@ data class Post (
     var page : Long,
 
     @ColumnInfo(name = "is_bookmark")
-    var isBookmark : Boolean = false
+    var isBookmark : Boolean = false,
+
+    @ColumnInfo(name = "order_by")
+    var orderBy: String? = "latest",
+
+    @ColumnInfo(name = "query")
+    var query: String? = "",
+
+    @ColumnInfo(name = "collection_id")
+    var collectionID: Long? = 0L
 ) : Parcelable
 
 @Parcelize
@@ -61,7 +70,7 @@ data class Img(
 @Parcelize
 data class User(
     @field:Json(name ="bio")val bio: String? = "No Bio",
-    @field:Json(name ="id")val id: String,
+    @field:Json(name ="id")val id: String? = "",
     @field:Json(name ="instagram_username")val instagramName: String? = "NaN",
     @field:Json(name ="name")val name: String,
     @field:Json(name ="portfolio_url")val portfolioUrl: String? = "NaN",

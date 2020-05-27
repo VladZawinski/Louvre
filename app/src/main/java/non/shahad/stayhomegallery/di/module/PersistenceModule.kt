@@ -10,6 +10,7 @@ import non.shahad.stayhomegallery.data.db.dao.CollectionDao
 import non.shahad.stayhomegallery.data.db.dao.PostDao
 import non.shahad.stayhomegallery.data.db.database.LouvreDatabase
 import non.shahad.stayhomegallery.utils.constants.Persistence
+import non.shahad.stayhomegallery.utils.prefs.SharedPrefHelper
 import java.io.File
 import javax.inject.Singleton
 
@@ -43,6 +44,12 @@ class PersistenceModule {
     @Singleton
     fun provideCollectionDao(db : LouvreDatabase) : CollectionDao{
         return db.collectionDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePrefHelper(ctx : Context) : SharedPrefHelper{
+        return SharedPrefHelper(ctx)
     }
 
     @Provides

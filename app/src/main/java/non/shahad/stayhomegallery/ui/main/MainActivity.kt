@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(),FragNavController.RootFragmentListener
         fragNavController.apply {
             transactionListener = this@MainActivity
             rootFragmentListener = this@MainActivity
-            createEager = true
+            createEager = false
             fragmentHideStrategy = FragNavController.DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
 
             navigationStrategy = UnlimitedTabHistoryStrategy(object : FragNavSwitchController {

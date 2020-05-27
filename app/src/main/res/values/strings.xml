@@ -13,4 +13,10 @@
     <string name="search_title_hint">Watcha gonna want?</string>
     <string name="explore_title">Photos, Tags, or Collections</string>
     <string name="cancel">Cancel</string>
+
+<!--    BottomSheet-->
+    <string name="sort_by">Sort by</string>
+    <string name="trending">Trending</string>
+    <string name="latest">Latest</string>
+    <string name="oldest">Oldest</string>
 </resources>

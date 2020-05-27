@@ -44,4 +44,20 @@
         <item name="android:fontFamily">@font/sans_black_family</item>
     </style>
 
+    <style name="SortByBottomSheetTextStyle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/sans_black_family</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SortByBottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="bottomSheetStyle">@style/SortByBottomSheetStyle</item>
+    </style>
+
+
+    <style name="SortByBottomSheetStyle">
+        <item name="android:background">@drawable/sorby_bottomsheet_style</item>
+    </style>
+
 </resources>

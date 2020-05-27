@@ -4,26 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.dropbox.android.external.store4.ExperimentalStoreApi
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.home_header.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
 import non.shahad.stayhomegallery.data.local.mapper.mapToBookmark
 import non.shahad.stayhomegallery.di.ViewModelFactory
+import non.shahad.stayhomegallery.ui.bottomsheets.SortByBottomSheetFragment
 import non.shahad.stayhomegallery.ui.recyclerviewutils.RecyclerViewPaginator
+import non.shahad.stayhomegallery.utils.constants.BottomNavigation
+import non.shahad.stayhomegallery.utils.constants.SortByReq
 import non.shahad.stayhomegallery.utils.ext.switchToDetail
 import non.shahad.stayhomegallery.utils.ext.timberD
 import non.shahad.stayhomegallery.utils.ext.toast
 import non.shahad.stayhomegallery.utils.network.Status
 import java.io.File
 import javax.inject.Inject
-
 
 class HomeFragment : BaseFragment() {
 
@@ -41,30 +46,47 @@ class HomeFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @ExperimentalStoreApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initAdapter()
         initiateRecyclerView()
         swipeToRefresh()
+        handleBottomSheetEvents()
+
+    }
+
+    private fun handleBottomSheetEvents(){
+        include.sortedByBtn.setOnClickListener {
+            val bottomSheet = SortByBottomSheetFragment{
+                when(it){
+                    SortByReq.OLDEST -> {
+                        viewModel.putOrder("oldest")
+                        viewModel.fetchFresh(1)
+                    }
+                    SortByReq.TRENDING -> {
+                        viewModel.putOrder("trending")
+                        viewModel.fetchFresh(1)
+                    }
+                    SortByReq.LATEST -> {
+                        viewModel.putOrder("latest")
+                        viewModel.fetchFresh(1)
+                    }
+                }
+            }
+            bottomSheet.setTargetFragment(this,101)
+            bottomSheet.show(fragmentManager!!,HomeFragment::class.java.toString())
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchUnsplashStore(1)
+        viewModel.fetchUnsplashByOrder(1)
 
         viewModel.unsplashResponse.observe(viewLifecycleOwner, Observer {
-            when(it.status){
-
-                Status.SUCCESS -> {
-                    lifecycleScope.launch {
-                        delay(500)
-                        delegate.insertItems(lifecycleScope,it.data!!)
-                    }
-
-                }
-                Status.ERROR -> requireContext().toast(it.message!!)
-            }
+            delegate.insertItems(lifecycleScope,it)
         })
 
         viewModel.freshResponse.observe(viewLifecycleOwner, Observer {
@@ -73,16 +95,18 @@ class HomeFragment : BaseFragment() {
             paginator.resetCurrentPage()
         })
 
-    }
-
-    private fun swipeToRefresh(){
-        swipeRefresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener{
-            override fun onRefresh() {
-                viewModel.refresh()
-            }
-
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            timberD("HomeFragment_","$it")
         })
+
     }
+
+    @ExperimentalStoreApi
+    private fun swipeToRefresh(){
+        swipeRefresh.setOnRefreshListener { viewModel.fetchFresh(1) }
+
+    }
+
 
     private fun initiateRecyclerView(){
         homeRecyclerView.apply {
@@ -92,7 +116,7 @@ class HomeFragment : BaseFragment() {
                 this,
                 isLoading = {viewModel.isLoading},
                 loadMore = {
-                    viewModel.fetchUnsplashStore(it.toLong())
+                    viewModel.fetchUnsplashByOrder(it.toLong())
                 },
                 onLast = {false}
             ).apply {

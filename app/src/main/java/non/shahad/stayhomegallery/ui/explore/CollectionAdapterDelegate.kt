@@ -8,7 +8,9 @@ import non.shahad.stayhomegallery.data.db.entity.Collection
 import non.shahad.stayhomegallery.databinding.ExploreCollectionItemBinding
 import non.shahad.stayhomegallery.utils.ext.bindedView
 
-class CollectionAdapterDelegate : AdapterDelegate<List<Collection>>(){
+class CollectionAdapterDelegate(
+    val onRootClick : (Collection) -> Unit
+) : AdapterDelegate<List<Collection>>(){
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return CollectionItemViewHolder(
@@ -34,6 +36,9 @@ class CollectionAdapterDelegate : AdapterDelegate<List<Collection>>(){
         val binding : ExploreCollectionItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(collection: Collection){
+            binding.root.setOnClickListener {
+                onRootClick(collection)
+            }
             binding.preview = collection
             binding.palette = binding.overlayView
             binding.executePendingBindings()

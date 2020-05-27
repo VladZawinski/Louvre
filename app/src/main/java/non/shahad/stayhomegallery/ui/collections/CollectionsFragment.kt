@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
 import non.shahad.stayhomegallery.ui.recyclerviewutils.RecyclerViewPaginator
+import non.shahad.stayhomegallery.utils.ext.switchToCollectionDetail
 
 
 class CollectionsFragment : BaseFragment() {
@@ -75,7 +76,7 @@ class CollectionsFragment : BaseFragment() {
 
     private fun initAdapter() {
         delegate = CollectionsAdapterDelegation {
-
+            context!!.switchToCollectionDetail(it)
         }
     }
 

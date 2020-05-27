@@ -1,11 +1,14 @@
 package non.shahad.stayhomegallery.data.db.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "collection")
 data class Collection(
     @field:Json(name = "curated")
@@ -45,15 +48,17 @@ data class Collection(
 
     @ColumnInfo(name = "page")
     var page : Long
-)
+) : Parcelable
 
+@Parcelize
 data class Links(
     @field:Json(name = "html")
     val html: String,
     @field:Json(name = "related")
     val related: String
-)
+) : Parcelable
 
+@Parcelize
 data class PreviewPhoto(
     @field:Json(name = "created_at")
     val createdAt: String,
@@ -63,8 +68,10 @@ data class PreviewPhoto(
     val updatedAt: String,
     @field:Json(name = "urls")
     val urls: Urls
-)
+) : Parcelable
 
+
+@Parcelize
 data class Urls(
     @field:Json(name = "full")
     val full: String,
@@ -76,4 +83,4 @@ data class Urls(
     val small: String,
     @field:Json(name = "thumb")
     val thumb: String
-)
+) : Parcelable

@@ -4,66 +4,65 @@ import androidx.lifecycle.*
 import com.dropbox.android.external.store4.*
 import kotlinx.coroutines.*
 import non.shahad.stayhomegallery.data.db.entity.Post
-import non.shahad.stayhomegallery.data.repository.PostRepository
+import non.shahad.stayhomegallery.utils.configs.UnsplashConfig
 import non.shahad.stayhomegallery.utils.ext.timberD
-import non.shahad.stayhomegallery.utils.network.Resource
+import non.shahad.stayhomegallery.utils.prefs.SharedPrefHelper
 import javax.inject.Inject
+import javax.inject.Named
 
 class HomeViewModel @Inject constructor(
-    private val postRepo : PostRepository
+    @Named("unsplashPostStore") val unsplashStore : Store<Pair<Long,UnsplashConfig>,List<Post>>,
+    private val pref: SharedPrefHelper
 ) : ViewModel() {
 
     var isLoading = false
-    val unsplashResponse = MutableLiveData<Resource<List<Post>>>()
+
+    val unsplashResponse = MutableLiveData<List<Post>>()
 
     val freshResponse = MutableLiveData<List<Post>>()
 
-    fun fetchUnsplashStore(page : Long){
+    val error = MutableLiveData<String>()
+
+    private val errorExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        timberD("GG_","${throwable.message}")
+        error.postValue(throwable.message)
+    }
+
+    fun fetchUnsplashByOrder(page: Long){
         isLoading = true
-        viewModelScope.launch {
-            try {
-                // Cache
-                val posts = withContext(Dispatchers.IO){
-                    postRepo.fetchUnsplash(page).get(page)
+        viewModelScope.launch(errorExceptionHandler) {
+            withContext(Dispatchers.IO){
+                timberD("HomeViewModel_","${pref.getOrder()}")
+                val config = Pair(page, UnsplashConfig(pref.getOrder()))
+
+                val cache = unsplashStore.get(config)
+                unsplashResponse.postValue(cache)
+
+                if (cache.isNullOrEmpty()){
+                    val remote = unsplashStore.fresh(config)
+                    unsplashResponse.postValue(remote)
                 }
-
-                if (posts.isNotEmpty()){
-                    unsplashResponse.postValue(Resource.success(posts))
-                    isLoading = false
-                    return@launch
-                }
-
-                val fresh = withContext(Dispatchers.IO){
-                    postRepo.fetchUnsplash(page).fresh(page)
-                }
-
-                unsplashResponse.postValue(Resource.success(fresh))
-                isLoading = false
-
-
-            }catch (e : Throwable){
-                unsplashResponse.postValue(Resource.error(e.message!!,null))
                 isLoading = false
             }
-
         }
     }
 
-    @ExperimentalStoreApi
-    fun refresh(){
+    fun fetchFresh(page: Long){
         isLoading = true
-        viewModelScope.launch {
-            isLoading = try {
-                val cache = postRepo.fetchUnsplash(1).get(1)
-                freshResponse.postValue(cache)
-                val fresh = postRepo.fetchUnsplash(1).fresh(1)
+        viewModelScope.launch(errorExceptionHandler) {
+            withContext(Dispatchers.IO){
+                val config = Pair(page, UnsplashConfig(pref.getOrder()))
+                val fresh = unsplashStore.fresh(config)
                 freshResponse.postValue(fresh)
-                false
-            }catch (e : Throwable){
-                timberD("Home_","$e")
-                false
+                isLoading = false
             }
         }
     }
+
+    fun putOrder(orderBy: String){
+        pref.putOrder(orderBy)
+    }
+
+
 
 }
