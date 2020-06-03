@@ -25,14 +25,14 @@ So louvre came from museum
 - [Adapter Delegate](https://github.com/sockeqwe/AdapterDelegates) for adapter delegation
 
 ## Download
-Go to the [Releases](https://github.com/ThihaKaungSet3/Louvre/release/Louvre.apk) to download APK.
+Go to the [Releases](https://github.com/ThihaKaungSet3/Louvre/blob/master/app/release/Louvre.apk) to download APK.
 
 ### Screenshots
 <p align="center">
   <img src="screenshots/home.png" width="270" alt="Home">
   <img src="screenshots/explore.png" width="270" alt="Explore">
   <img src="screenshots/collections.png" width="270" alt="Collections">
-  <img src="screenshots/favorite.jpg" width="270"  alt="Favorite">
+  <img src="screenshots/favorite.png" width="270"  alt="Favorite">
   <img src="screenshots/detail.png" width="270" alt="Detail">
 </p>
 
