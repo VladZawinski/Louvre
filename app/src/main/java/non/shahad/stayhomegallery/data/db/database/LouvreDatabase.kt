@@ -14,7 +14,7 @@ import non.shahad.stayhomegallery.data.db.entity.Post
 
 @Database(entities = [
     Post::class,Bookmark::class,Collection::class
-],version = 2,exportSchema = false)
+],version = 1,exportSchema = false)
 @TypeConverters(ListStringConverter::class,ListPreviewPhotoConverter::class)
 abstract class LouvreDatabase : RoomDatabase(){
     abstract fun postDao() : PostDao

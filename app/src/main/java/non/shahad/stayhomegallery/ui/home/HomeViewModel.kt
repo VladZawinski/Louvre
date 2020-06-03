@@ -3,6 +3,7 @@ package non.shahad.stayhomegallery.ui.home
 import androidx.lifecycle.*
 import com.dropbox.android.external.store4.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.utils.configs.UnsplashConfig
 import non.shahad.stayhomegallery.utils.ext.timberD
@@ -24,7 +25,6 @@ class HomeViewModel @Inject constructor(
     val error = MutableLiveData<String>()
 
     private val errorExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        timberD("GG_","${throwable.message}")
         error.postValue(throwable.message)
     }
 
@@ -32,16 +32,9 @@ class HomeViewModel @Inject constructor(
         isLoading = true
         viewModelScope.launch(errorExceptionHandler) {
             withContext(Dispatchers.IO){
-                timberD("HomeViewModel_","${pref.getOrder()}")
                 val config = Pair(page, UnsplashConfig(pref.getOrder()))
+                unsplashResponse.postValue(unsplashStore.get(config))
 
-                val cache = unsplashStore.get(config)
-                unsplashResponse.postValue(cache)
-
-                if (cache.isNullOrEmpty()){
-                    val remote = unsplashStore.fresh(config)
-                    unsplashResponse.postValue(remote)
-                }
                 isLoading = false
             }
         }

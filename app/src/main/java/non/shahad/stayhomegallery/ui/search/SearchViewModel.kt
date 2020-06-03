@@ -20,7 +20,7 @@ class SearchViewModel @Inject constructor(
     val searchStore: Store<Pair<Long, PexelsConfig>,List<Post>>
 ) : ViewModel() {
 
-    private val errorHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val errorHandler = CoroutineExceptionHandler { _, throwable ->
 
     }
 
@@ -31,14 +31,7 @@ class SearchViewModel @Inject constructor(
             withContext(Dispatchers.IO){
                 val config = Pair<Long,PexelsConfig>(page, PexelsConfig(query))
 
-                val cache = searchStore.get(config)
-                searchResult.postValue(cache)
-
-                if (cache.isNullOrEmpty()){
-                    val remote = searchStore.fresh(config)
-                    searchResult.postValue(remote)
-                }
-
+                searchResult.postValue(searchStore.get(config))
             }
         }
     }

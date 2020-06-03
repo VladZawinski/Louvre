@@ -15,6 +15,7 @@ import non.shahad.stayhomegallery.R
 import non.shahad.stayhomegallery.common.fragment.BaseFragment
 import non.shahad.stayhomegallery.ui.recyclerviewutils.RecyclerViewPaginator
 import non.shahad.stayhomegallery.utils.ext.switchToCollectionDetail
+import non.shahad.stayhomegallery.utils.ext.timberD
 
 
 class CollectionsFragment : BaseFragment() {
@@ -47,12 +48,13 @@ class CollectionsFragment : BaseFragment() {
         viewModel.fetchCollections(1)
 
         viewModel.collectionsResponse.observe(viewLifecycleOwner, Observer {
+            timberD("Collection_","$it")
             delegate.insertItems(lifecycleScope,it)
 
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
-
+            timberD("Collection_","$it")
         })
     }
 

@@ -28,15 +28,8 @@ class ExploreViewModel @Inject constructor(
 
     fun fetchCollection(page: Long) {
         viewModelScope.launch(exceptionHandler) {
-            timberE("Random_","$page")
             withContext(Dispatchers.IO){
-                val cache = store.get(page)
-                collectionResponse.postValue(cache)
-
-                if (cache.isNullOrEmpty()){
-                    val remote = store.fresh(page)
-                    collectionResponse.postValue(remote)
-                }
+                collectionResponse.postValue(store.get(page))
             }
         }
 

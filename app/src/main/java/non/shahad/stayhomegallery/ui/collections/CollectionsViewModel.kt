@@ -4,10 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import non.shahad.stayhomegallery.data.db.entity.Collection
@@ -32,13 +34,7 @@ class CollectionsViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             isLoading = true
             withContext(Dispatchers.IO){
-                val cache = store.get(page)
-                collectionsResponse.postValue(cache)
-
-                if (cache.isNullOrEmpty()){
-                    val remote = store.fresh(page)
-                    collectionsResponse.postValue(remote)
-                }
+                collectionsResponse.postValue(store.get(page))
                 isLoading = false
             }
         }
