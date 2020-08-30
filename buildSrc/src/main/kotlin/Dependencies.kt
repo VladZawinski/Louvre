@@ -35,6 +35,7 @@ object Versions {
     const val STORE = "4.0.0-alpha03"
     const val STETHO = "1.5.1"
     const val FRAGMENT_KTX = "1.2.4"
+    const val COROUTINE_CACHE = "0.3.0"
 }
 
 object BuildPlugins {
@@ -95,6 +96,9 @@ object Libs {
 
     const val STETHO = "com.facebook.stetho:stetho:${Versions.STETHO}"
     const val STETHO_OKHTTP = "com.facebook.stetho:stetho-okhttp3:${Versions.STETHO}"
+
+
+    const val COROUTINE_CACHE = "com.github.diefferson:CoroutinesCache:${Versions.COROUTINE_CACHE}"
 
 }
 

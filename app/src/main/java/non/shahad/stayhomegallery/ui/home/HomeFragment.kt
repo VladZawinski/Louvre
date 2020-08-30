@@ -82,7 +82,7 @@ class HomeFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.fetchUnsplashByOrder(1)
+        viewModel.fetchUnsplashNewsByOrder(1)
 
         viewModel.unsplashResponse.observe(viewLifecycleOwner, Observer {
             delegate.insertItems(lifecycleScope,it)
@@ -113,9 +113,9 @@ class HomeFragment : BaseFragment() {
 
             paginator = RecyclerViewPaginator(
                 this,
-                isLoading = {viewModel.isLoading},
+                isLoading = {viewModel.isLoading.value!!},
                 loadMore = {
-                    viewModel.fetchUnsplashByOrder(it.toLong())
+                    viewModel.fetchUnsplashNewsByOrder(it)
                 },
                 onLast = {false}
             ).apply {

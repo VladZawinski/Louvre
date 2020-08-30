@@ -5,6 +5,8 @@ import com.dropbox.android.external.store4.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import non.shahad.stayhomegallery.data.db.entity.Post
+import non.shahad.stayhomegallery.data.repository.home.HomeRepository
+import non.shahad.stayhomegallery.data.store.UnsplashStore
 import non.shahad.stayhomegallery.utils.configs.UnsplashConfig
 import non.shahad.stayhomegallery.utils.ext.timberD
 import non.shahad.stayhomegallery.utils.prefs.SharedPrefHelper
@@ -12,11 +14,10 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class HomeViewModel @Inject constructor(
-    @Named("unsplashPostStore") val unsplashStore : Store<Pair<Long,UnsplashConfig>,List<Post>>,
-    private val pref: SharedPrefHelper
+    private val repo: HomeRepository
 ) : ViewModel() {
 
-    var isLoading = false
+    val isLoading = MutableLiveData<Boolean>()
 
     val unsplashResponse = MutableLiveData<List<Post>>()
 
@@ -24,36 +25,36 @@ class HomeViewModel @Inject constructor(
 
     val error = MutableLiveData<String>()
 
-    private val errorExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val errorExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         error.postValue(throwable.message)
+        isLoading.value = false
     }
 
-    fun fetchUnsplashByOrder(page: Long){
-        isLoading = true
-        viewModelScope.launch(errorExceptionHandler) {
+    fun fetchUnsplashNewsByOrder(page: Int){
+        isLoading.value = true
+        viewModelScope.launch (errorExceptionHandler){
             withContext(Dispatchers.IO){
-                val config = Pair(page, UnsplashConfig(pref.getOrder()))
-                unsplashResponse.postValue(unsplashStore.get(config))
-
-                isLoading = false
+                val result = repo.fetchUnsplashImagesByOrder(page)
+                unsplashResponse.postValue(result)
+                isLoading.postValue(false)
             }
         }
     }
 
-    fun fetchFresh(page: Long){
-        isLoading = true
-        viewModelScope.launch(errorExceptionHandler) {
+    fun fetchFresh(page: Int){
+        isLoading.value = true
+        viewModelScope.launch (errorExceptionHandler){
             withContext(Dispatchers.IO){
-                val config = Pair(page, UnsplashConfig(pref.getOrder()))
-                val fresh = unsplashStore.fresh(config)
-                freshResponse.postValue(fresh)
-                isLoading = false
+                val result = repo.fetchFreshUnsplashImages(page)
+                freshResponse.postValue(result)
+                isLoading.postValue(false)
             }
         }
     }
+
 
     fun putOrder(orderBy: String){
-        pref.putOrder(orderBy)
+        repo.putOrder(orderBy)
     }
 
 

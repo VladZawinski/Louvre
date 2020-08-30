@@ -12,7 +12,7 @@ interface LouvreAPI {
 
     @GET("unsplash/photos")
     suspend fun getUnsplashImages(
-        @Query("page") page : Long,
+        @Query("page") page : Int,
         @Query("order_by")orderBy: String
     ) : UnsplashResponse
 

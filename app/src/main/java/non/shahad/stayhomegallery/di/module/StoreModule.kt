@@ -12,6 +12,7 @@ import non.shahad.stayhomegallery.data.db.dao.PostDao
 import non.shahad.stayhomegallery.data.db.entity.Collection
 import non.shahad.stayhomegallery.data.db.entity.Post
 import non.shahad.stayhomegallery.data.remote.LouvreAPI
+import non.shahad.stayhomegallery.data.store.UnsplashStore
 import non.shahad.stayhomegallery.utils.configs.CollectionDetailConfig
 import non.shahad.stayhomegallery.utils.configs.PexelsConfig
 import non.shahad.stayhomegallery.utils.configs.UnsplashConfig
@@ -27,9 +28,9 @@ class StoreModule {
     @Provides
     @Named("unsplashPostStore")
     @Singleton
-    fun provideUnsplashStore(db: PostDao, remote: LouvreAPI) : Store<Pair<Long,UnsplashConfig>,List<Post>> {
+    fun provideUnsplashStore(db: PostDao, remote: LouvreAPI) : UnsplashStore {
         return StoreBuilder
-            .fromNonFlow<Pair<Long,UnsplashConfig>,List<Post>> { (page, config) ->
+            .fromNonFlow<Pair<Int,UnsplashConfig>,List<Post>> { (page, config) ->
                 remote.getUnsplashImages(page, config.orderBy).posts
             }
             .cachePolicy(
